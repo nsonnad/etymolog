@@ -11,11 +11,9 @@ category_exception = re.compile(r'(\:)?Category:[^,]+')
 
 tabin = csv.reader(tabin, dialect=csv.excel_tab)
 
-print 'writing headers...'
 commaout = csv.writer(commaout, dialect=csv.excel)
 commaout.writerow(['lang1','word1','lang2','word2'])
 
-print 'writing to csv...'
 for row in tabin:
     # convert to single csv string (cuts down on loops as well)
     row = ','.join(row)
