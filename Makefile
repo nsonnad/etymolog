@@ -12,29 +12,29 @@ input/iso-639-3.tab:
 		@echo "\nGetting iso-639-3 codes..."
 		@echo "-----------------------------------------------------------"
 		mkdir -p $(dir $@)
-		curl -o $@ 'http://www-01.sil.org/iso639-3/iso-639-3.tab'
-		touch $@
+		curl -o $@.download 'http://www-01.sil.org/iso639-3/iso-639-3.tab'
+		mv $@.download $@
 
 input/iso-639-2.txt:
 		@echo "\nGetting iso-639-2 codes..."
 		@echo "-----------------------------------------------------------"
 		mkdir -p $(dir $@)
-		curl -o $@ 'http://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt'
-		touch $@
+		curl -o $@.download 'http://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt'
+		mv $@.download $@
 
 input/iso-639-5.tsv:
 		@echo "\nGetting iso-639-5 codes..."
 		@echo "-----------------------------------------------------------"
 		mkdir -p $(dir $@)
-		curl -o $@ 'http://id.loc.gov/vocabulary/iso639-5.tsv'
-		touch $@
+		curl -o $@.download 'http://id.loc.gov/vocabulary/iso639-5.tsv'
+		mv $@.download $@
 
 input/retired-iso.tab:
 		@echo "\nGetting retired iso codes..."
 		@echo "-----------------------------------------------------------"
 		mkdir -p $(dir $@)
-		curl -o $@ 'http://www-01.sil.org/iso639-3/iso-639-3_Retirements.tab'
-		touch $@
+		curl -o $@.download 'http://www-01.sil.org/iso639-3/iso-639-3_Retirements.tab'
+		mv $@.download $@
 
 input/etymwn.tsv:
 		@echo "\nUnzipping etymological data..."
