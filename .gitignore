@@ -1,3 +1,4 @@
-etymwn.zip
-etymwn.tsv
-*.csv
+input/*
+!input/etymwn-20130208.zip
+output
+py/*.pyc
