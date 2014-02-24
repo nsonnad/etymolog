@@ -84,3 +84,5 @@ db/import.sh: db/neo4j-batch-importer.zip
 etymwn.db: db/import.sh db/relationships.csv db/uniq_words.csv
 		cd db; ./import.sh $@ uniq_words.csv relationships.csv; cd -
 
+clean:
+		rm -rf db/ output/
