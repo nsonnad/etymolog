@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import sys, os
+import sys
+import os
 import re
 import csv
 from iso_dict import make_iso_dict
@@ -30,11 +31,13 @@ rows = []
 junk_to_replace = re.compile(r'(\"|\'|rel\:)')
 category_exception = re.compile(r'(\:)?Category:[^,]+')
 
+
 def get_lang_name(name):
     if name.startswith('p_'):
         return iso_dict[name[2:]]
     else:
         return iso_dict[name]
+
 
 # func to add rows combining etymwn and iso code data
 def add_row(row_data):

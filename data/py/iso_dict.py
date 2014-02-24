@@ -5,6 +5,7 @@ import csv
 # Make dictionary mapping language codes to their full English names
 # -------------------------------------------------------------------
 
+
 def make_iso_dict(iso3, iso2, iso5, retired):
     retired_tabin = csv.reader(retired, dialect=csv.excel_tab)
     iso5_tabin = csv.reader(iso5, dialect=csv.excel_tab)
@@ -28,6 +29,5 @@ def make_iso_dict(iso3, iso2, iso5, retired):
 
     for row in iso3_tabin:
         add_entry(row, 0, 6)
-        
-    return iso_dict
 
+    return iso_dict
