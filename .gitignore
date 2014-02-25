@@ -2,7 +2,7 @@ data/input/*
 !data/input/etymwn-20130208.zip
 output
 py/*.pyc
-node_modules
+**/*/node_modules
 neo4j-community-2.0.0
 neo7j
 

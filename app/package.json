@@ -7,6 +7,25 @@
   },
   "dependencies": {
     "express": "3.4.8",
-    "jade": "*"
+    "jade": "*",
+    "neo4j": "^1.1.0"
+  },
+  "devDependencies": {
+    "run-sequence": "^0.3.6",
+    "gulp-embedlr": "^0.5.2",
+    "gulp-clean": "^0.2.4",
+    "gulp-concat": "^2.1.7",
+    "gulp-livereload": "^1.1.1",
+    "gulp-minify-css": "^0.3.0",
+    "gulp-uglify": "^0.2.1",
+    "gulp-stylus": "0.0.13",
+    "gulp-browserify": "^0.4.6",
+    "gulp": "^3.5.2",
+    "connect-livereload": "^0.3.2",
+    "gulp-nodemon": "^1.0.0",
+    "gulp-coffee": "^1.4.1",
+    "tiny-lr": "0.0.5",
+    "coffeeify": "^0.6.0",
+    "express-livereload": "0.0.24"
   }
 }
