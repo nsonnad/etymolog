@@ -51,17 +51,19 @@ def add_row(row_data):
     # separate interesting values
     clean = re.sub(r'(\w+):\s', r'\1,', row_data).split(',')
     # remove etymology relationship
-    clean = [clean[i] for i in range(0,5) if i != 2] 
-
-    # add final values
-    rows.append({
-        'lang1_iso3':  clean[0],
-        'lang1_name':  get_lang_name(clean[0]),
-        'word1':       clean[1],
-        'lang2_iso3':  clean[2],
-        'lang2_name':  get_lang_name(clean[2]),
-        'word2':       clean[3]
-        })
+    clean = [clean[i] for i in range(0, 5) if i != 2]
+    if clean[3].startswith('-'):
+        return
+    else:
+        # add final values
+        rows.append({
+            'lang1_iso3':  clean[0],
+            'lang1_name':  get_lang_name(clean[0]),
+            'word1':       clean[1],
+            'lang2_iso3':  clean[2],
+            'lang2_name':  get_lang_name(clean[2]),
+            'word2':       clean[3]
+            })
 
 
 # cycle through rows, adding relevant info

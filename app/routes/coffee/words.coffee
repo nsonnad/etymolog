@@ -6,7 +6,6 @@ db = new neo4j.GraphDatabase(
 )
 
 exports.getWordById = (req, res) ->
-  console.log 'getting id...'
   id = req.params.id
   db.getNodeById id, (err, node) ->
     if err then console.error err
@@ -14,17 +13,19 @@ exports.getWordById = (req, res) ->
     res.send node
 
 exports.getWordTraversal = (req, res) ->
-  console.log 'getting id...'
   id = req.params.id
+
   query = [
-    "START a=node(#{id})"
-    "MATCH p=a-[r*]->x"
-    "WHERE NOT(x-->())"
-    "RETURN a,x"
+    "start a=node(#{id})"
+    "match (a)-[r:ORIGIN_OF*1..2]-(b)"
+    "with r as rels"
+    "return rels"
   ].join('\n')
+
   params =
     id: id
 
   db.query query, params, (err, results) ->
     if err then console.error err
+    console.log results.length
     res.send results

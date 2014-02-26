@@ -17,10 +17,12 @@ for line in uniq_in:
 
 
 print 'Writing relationships csv...'
-rels_out.writerow(['start', 'end', 'type'])
+rels_out.writerow(['start', 'end', 'type', 'target', 'origin'])
+#rels_out.writerow(['start', 'end', 'type'])
 for line in data_in:
     id1 = wordlookup[line['word1']]['i:id']
     id2 = wordlookup[line['word2']]['i:id']
-    relation = [id2, id1, 'ORIGIN_OF']
+    relation = [id2, id1, 'ORIGIN_OF', line['word1'], line['word2']]
+    #relation = [id2, id1, 'ORIGIN_OF']
 
     rels_out.writerow(relation)

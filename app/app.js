@@ -5,14 +5,13 @@
 
 var express = require('express');
 var routes = require('./routes');
-//var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var livereload = require('express-livereload');
-var liveReloadPort = 35729;
 
 var app = express();
 var words = require('./routes/words');
+var liveReloadPort = 35729;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
