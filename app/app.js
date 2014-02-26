@@ -5,13 +5,14 @@
 
 var express = require('express');
 var routes = require('./routes');
-var user = require('./routes/user');
+//var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var livereload = require('express-livereload');
 var liveReloadPort = 35729;
 
 var app = express();
+var words = require('./routes/words');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -31,7 +32,8 @@ app.configure('development', function () {
 app.use(app.router);
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/word/:id', words.getWordById);
+app.get('/traverse/:id', words.getWordTraversal);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

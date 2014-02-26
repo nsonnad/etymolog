@@ -5,5 +5,8 @@ py/*.pyc
 **/*/node_modules
 neo4j-community-2.0.0
 neo7j
+app/routes/*.js
+app/public/scripts
+app/public/styles
 
 data/db

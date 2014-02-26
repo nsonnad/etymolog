@@ -15,6 +15,7 @@ var clean           = require('gulp-clean');
 var nodemon         = require('gulp-nodemon');
 
 var lrport = 35729;
+
 var paths = {
   views: {
     jade: __dirname + '/views/coffee',
@@ -106,7 +107,10 @@ gulp.task('clean-build', function () {
 });
 
 gulp.task('nodemon', function () {
-  nodemon({ script: 'app.js' });
+  nodemon({ 
+    script: 'app.js',
+    ext: 'js jade coffee'
+  });
 });
 
 //gulp.task('server', function () {
