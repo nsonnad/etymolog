@@ -17,9 +17,8 @@ exports.getWordTraversal = (req, res) ->
 
   query = [
     "start a=node(#{id})"
-    "match (a)-[r:ORIGIN_OF*1..2]-(b)"
-    "with r as rels"
-    "return rels"
+    "match p=(a)-[r:ORIGIN_OF*1..3]-(b)"
+    "return extract(n in relationships(p) | [n.target, n.origin])"
   ].join('\n')
 
   params =
