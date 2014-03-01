@@ -4,12 +4,9 @@ import os
 import csv
 from collections import defaultdict
 
-dir = os.path.dirname(os.path.abspath(__file__))
-dir = os.path.abspath(os.path.join(dir, ".."))
-
 uniq_in = csv.DictReader(open(sys.argv[1]), delimiter='\t')
 data_in = csv.DictReader(open(sys.argv[2]))
-rels_out = csv.writer(open(dir + '/' + sys.argv[3], 'wb'), delimiter='\t')
+rels_out = csv.writer(open(sys.argv[3], 'wb'), delimiter='\t')
 
 wordlookup = defaultdict(list)
 for line in uniq_in:

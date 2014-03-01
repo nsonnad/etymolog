@@ -35,7 +35,6 @@ getWordTraversal = (req, res) ->
 
   db.query query, params, (err, results) ->
     if err then console.error err
-    console.log results[0].wordData.path.length
     res.send results
 
 _getIdByName = (req, res) ->

@@ -19,7 +19,7 @@ iso3_tabin = open(dir + '/input/iso-639-3.tab')
 iso2_tabin = open(dir + '/input/iso-639-2.txt')
 iso5_tabin = open(dir + '/input/iso-639-5.tsv')
 retired_tabin = open(dir + '/input/retired-iso.tab')
-csvout = open(dir + '/' + sys.argv[2], 'wb')
+csvout = open(sys.argv[2], 'wb')
 
 print 'Building hash of iso codes -> names...'
 iso_dict = make_iso_dict(iso3_tabin, iso2_tabin, iso5_tabin, retired_tabin)

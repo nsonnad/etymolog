@@ -3,11 +3,8 @@ import sys
 import os
 import csv
 
-dir = os.path.dirname(os.path.abspath(__file__))
-dir = os.path.abspath(os.path.join(dir, ".."))
-
 etymwn_in = csv.reader(open(sys.argv[1]))
-uniq_out = csv.writer(open(dir + '/' + sys.argv[2], 'wb'), delimiter='\t')
+uniq_out = csv.writer(open(sys.argv[2], 'wb'), delimiter='\t')
 
 words = set()
 for r in etymwn_in:
