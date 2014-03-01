@@ -32,7 +32,7 @@ app.use(app.router);
 
 app.get('/', routes.index);
 app.get('/id/:id', words.getWordById);
-app.get('/word/:name', words.getWordByName);
+app.get('/word/:name', words._getIdByName);
 app.get('/traverse/:id', words.getWordTraversal);
 
 http.createServer(app).listen(app.get('port'), function(){
