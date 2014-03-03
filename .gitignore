@@ -1,3 +1,4 @@
+neo4j
 data/input/*
 !data/input/etymwn-20130208.zip
 output
