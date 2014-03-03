@@ -4,7 +4,7 @@ ETYMWN_FILE=etymwn-20130208.zip
 OBJECTS = \
 		neo4j \
 		${NEO4J_VERSION}-unix.tar.gz \
-		${NEO4J_VERSION}/data/etymwn.db \
+		${NEO4J_VERSION}/data/graph.db \
 		data/db/import.sh \
 		data/db/neo4j-batch-importer.zip \
 		data/db/relationships.csv \
@@ -30,6 +30,7 @@ neo4j: ${NEO4J_VERSION}-unix.tar.gz
 		@echo "-----------------------------------------------------------"
 		tar -zxvf ${NEO4J_VERSION}-unix.tar.gz
 		ln -s ${NEO4J_VERSION}/bin/neo4j neo4j
+		rm -rf ${NEO4J_VERSION}/data/graph.db
 
 data/input/iso-639-3.tab:
 		@echo "\Fetching iso-639-3 codes..."
@@ -108,11 +109,11 @@ data/db/import.sh: data/db/neo4j-batch-importer.zip
 		unzip -d data/db/ data/db/neo4j-batch-importer.zip
 		touch data/db/import.sh
 
-${NEO4J_VERSION}/data/etymwn.db: data/db/import.sh data/db/relationships.csv data/db/uniq_words.csv
+${NEO4J_VERSION}/data/graph.db: data/db/import.sh data/db/relationships.csv data/db/uniq_words.csv
 		@echo "\nImporting data into neo4j database..."
 		@echo "-----------------------------------------------------------"
-		cd data/db; ./import.sh etymwn.db uniq_words.csv relationships.csv; cd -
-		mv data/db/etymwn.db $@
+		cd data/db; ./import.sh graph.db uniq_words.csv relationships.csv; cd -
+		cp -r data/db/graph.db $@ && rm -rf data/db/graph.db
 
 app/node_modules:
 		@echo "\nInstalling npm modules..."
