@@ -1,4 +1,8 @@
 neo4j = require 'neo4j'
+_ = require 'lodash'
+
+transformWordData = require './transformWordData'
+
 db = new neo4j.GraphDatabase(
   process.env['NEO4J_URL'] or
   process.env['GRAPHENDB_URL'] or
@@ -11,23 +15,15 @@ getWordById = (req, res) ->
     if err then console.error err
     res.send node
 
-getWordTraversal = (req, res) ->
+getEtym = (req, res) ->
   id = req.params.id
 
   query = [
     "start a=node(#{id})"
     "match p=(a)-[r:ORIGIN_OF*1..3]-(b)"
     "where not b-->()"
-    "with {
-      word: a.word,
-      path: collect(extract(n in relationships(p) |
-        {
-          target: n.target,
-          origin: n.origin
-        }
-      ))
-    } as wordData"
-    "return distinct wordData"
+    "with extract(rel in rels(p) | {origin: ID(startnode(rel)), target: ID(endnode(rel))}) as wordData"
+    "return collect(distinct wordData)"
   ].join('\n')
 
   params =
@@ -35,7 +31,9 @@ getWordTraversal = (req, res) ->
 
   db.query query, params, (err, results) ->
     if err then console.error err
-    res.send results
+    #trans = transformWordData(results)
+    #res.send(JSON.stringify(trans))
+    res.send transformWordData(results)
 
 _getIdByName = (req, res) ->
   name = req.params.name
@@ -49,10 +47,9 @@ _getIdByName = (req, res) ->
 
   db.query query, params, (err, results) ->
     if err then console.error err
-    console.log results.length
     res.send results
 
 module.exports =
   getWordById: getWordById
-  getWordTraversal: getWordTraversal
+  getEtym: getEtym
   _getIdByName: _getIdByName

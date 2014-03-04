@@ -33,7 +33,7 @@ app.use(app.router);
 app.get('/', routes.index);
 app.get('/id/:id', words.getWordById);
 app.get('/word/:name', words._getIdByName);
-app.get('/traverse/:id', words.getWordTraversal);
+app.get('/etym/:id', words.getEtym);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
