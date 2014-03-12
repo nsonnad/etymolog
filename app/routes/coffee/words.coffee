@@ -42,7 +42,8 @@ getEtym = (req, res) ->
     if err then console.error err
     #trans = transformWordData(results)
     #res.send(JSON.stringify(trans))
-    res.send transformWordData(results)
+    flat = _.flatten(results[0].words)
+    res.send flat
 
 _getIdByName = (req, res) ->
   name = req.params.name
