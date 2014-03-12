@@ -22,8 +22,17 @@ getEtym = (req, res) ->
     "start a=node(#{id})"
     "match p=(a)-[r:ORIGIN_OF*1..3]-(b)"
     "where not b-->()"
-    "with extract(rel in rels(p) | {origin: ID(startnode(rel)), target: ID(endnode(rel))}) as wordData"
-    "return collect(distinct wordData)"
+    "with extract(rel in rels(p) | {
+      origin: {
+        id: ID(startnode(rel)),
+        word: startnode(rel).word
+      },
+      target: {
+        id: ID(endnode(rel)),
+        word: endnode(rel).word
+      }
+    }) as wordData"
+    "return collect(distinct wordData) as words"
   ].join('\n')
 
   params =
