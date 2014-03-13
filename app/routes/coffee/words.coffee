@@ -48,7 +48,7 @@ getNodeByWord = (req, res) ->
   console.log q
   query = [
     "match (n:Word) where n.word =~ {word}"
-    "return {id: ID(n), word: n.word} as word"
+    "return {id: ID(n), wordName: n.word, lang: n.lang_name} as word"
   ].join('\n')
 
   # semi-fuzzy search

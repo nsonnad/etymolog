@@ -3,16 +3,22 @@ require 'select2'
 
 wordUrl = 'http://localhost:3000/word'
 
+formatWordResult = (wordData) ->
+  "<p>#{wordData.word.wordName} - #{wordData.word.lang}</p>"
+
+#formatWordSelection = (word) ->
+  #return word.wordName
+
 $('#word-selector').select2({
   placeholder: 'Search for a word'
-  minimumInputLength: 1
+  minimumInputLength: 2
   ajax:
     dataType: 'json'
     url: wordUrl
     data: (term, page) ->
-      query =
-        q: term
-      return query
+      return {q: term}
     results: (data, page) ->
-      return {results: data[0]}
+      return {results: data}
+  formatResult: formatWordResult
+  #formatSelection: formatWordSelection
 })
