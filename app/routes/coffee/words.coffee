@@ -40,8 +40,6 @@ getEtym = (req, res) ->
 
   db.query query, params, (err, results) ->
     if err then console.error err
-    #trans = transformWordData(results)
-    #res.send(JSON.stringify(trans))
     flat = _.flatten(results[0].words)
     res.send flat
 

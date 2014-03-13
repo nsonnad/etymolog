@@ -55,7 +55,7 @@ gulp.task('server-coffee', function () {
 
 // Load modules with browserify, compile coffee and concat
 gulp.task('coffeeify', function () {
-  return gulp.src(paths.public.scripts + '/main.coffee', {read: false })
+  return gulp.src(paths.public.coffee + '/main.coffee', {read: false })
     .pipe(browserify({
       transform: ['coffeeify'],
       extensions: ['.coffee']
