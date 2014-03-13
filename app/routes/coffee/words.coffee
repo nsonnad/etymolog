@@ -43,15 +43,17 @@ getEtym = (req, res) ->
     flat = _.flatten(results[0].words)
     res.send flat
 
-_getIdByName = (req, res) ->
-  name = req.params.name
+getNodeByWord = (req, res) ->
+  q = req.query.q
+  console.log q
   query = [
-    "match (n:Word) where n.word={word}"
-    "return ID(n) as id"
+    "match (n:Word) where n.word =~ {word}"
+    "return {id: ID(n), word: n.word} as word"
   ].join('\n')
 
+  # semi-fuzzy search
   params =
-    word: name
+    word: "(?i)#{q}.*"
 
   db.query query, params, (err, results) ->
     if err then console.error err
@@ -60,4 +62,4 @@ _getIdByName = (req, res) ->
 module.exports =
   getWordById: getWordById
   getEtym: getEtym
-  _getIdByName: _getIdByName
+  getNodeByWord: getNodeByWord
