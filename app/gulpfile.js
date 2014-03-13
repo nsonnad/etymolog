@@ -127,7 +127,7 @@ gulp.task('serve-lr', function () {
 gulp.task('watch', function () {
   gulp.watch(paths.models.coffee + '/*.coffee', ['server-coffee']);
   gulp.watch(paths.routes.coffee + '/*.coffee', ['server-coffee']);
-  gulp.watch(paths.public.scripts + '/*.coffee', ['coffeeify']);
+  gulp.watch(paths.public.coffee + '/*.coffee', ['coffeeify']);
   gulp.watch(paths.public.styl + '/*.styl', ['stylus']);
 
   console.log('Watching for changes...');
