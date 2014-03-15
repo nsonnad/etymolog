@@ -69,6 +69,7 @@ gulp.task('stylus', function () {
   return gulp.src(paths.public.styl + '/*.styl')
     .pipe(stylus())
     .pipe(concat(outputFiles.css))
+    .pipe(minifyCss({relativeTo: './public/styl'}))
     .pipe(gulp.dest(paths.public.styles))
     .pipe(livereload(lrserver));
 });

@@ -9,7 +9,8 @@
     "express": "3.4.8",
     "jade": "*",
     "neo4j": "^1.1.0",
-    "lodash": "^2.4.1"
+    "lodash": "^2.4.1",
+    "select2": "^3.4.5"
   },
   "devDependencies": {
     "run-sequence": "^0.3.6",

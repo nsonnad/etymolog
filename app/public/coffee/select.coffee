@@ -1,17 +1,20 @@
 $ = require 'jquery'
 require 'select2'
 
-wordUrl = 'http://localhost:3000/word'
+drawNodes = require './drawNodes'
+
+wordUrl = '/word'
 
 formatWordResult = (wordData) ->
   "<p>#{wordData.word.wordName} - #{wordData.word.lang}</p>"
 
-#formatWordSelection = (word) ->
-  #return word.wordName
+formatWordSelection = (wordData) ->
+  "#{wordData.word.wordName} - #{wordData.word.lang}"
 
 $('#word-selector').select2({
   placeholder: 'Search for a word'
   minimumInputLength: 2
+  id: (e) -> e.word.id
   ajax:
     dataType: 'json'
     url: wordUrl
@@ -20,5 +23,15 @@ $('#word-selector').select2({
     results: (data, page) ->
       return {results: data}
   formatResult: formatWordResult
-  #formatSelection: formatWordSelection
+  formatSelection: formatWordSelection
+  dropdownCssClass: 'bigDrop'
+  escapeMarkup: (m) -> m
 })
+
+$('#word-selector').on 'change', (e) ->
+  reqUrl = '/etym/' + e.val
+  $.ajax({
+    url: reqUrl
+    success: (data) -> drawNodes data
+    dataType: 'json'
+  })

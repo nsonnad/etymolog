@@ -1,8 +1,6 @@
 neo4j = require 'neo4j'
 _ = require 'lodash'
 
-transformWordData = require './transformWordData'
-
 db = new neo4j.GraphDatabase(
   process.env['NEO4J_URL'] or
   process.env['GRAPHENDB_URL'] or
@@ -49,6 +47,7 @@ getNodeByWord = (req, res) ->
   query = [
     "match (n:Word) where n.word =~ {word}"
     "return {id: ID(n), wordName: n.word, lang: n.lang_name} as word"
+    "order by lower(n.word)"
   ].join('\n')
 
   # semi-fuzzy search
