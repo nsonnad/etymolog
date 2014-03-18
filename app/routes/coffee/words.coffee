@@ -1,5 +1,5 @@
 neo4j = require 'neo4j'
-_ = require 'lodash'
+flatten = require('lodash').flatten
 
 db = new neo4j.GraphDatabase(
   process.env['NEO4J_URL'] or
@@ -61,8 +61,8 @@ getEtym = (req, res) ->
 
   db.query query, params, (err, results) ->
     if err then console.error err
-    rels = _.flatten(results[0].rels)
-    nodes = _.flatten(results[0].nodes)
+    rels = flatten(results[0].rels)
+    nodes = flatten(results[0].nodes)
 
     response =
       rels: rels
