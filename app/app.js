@@ -31,9 +31,10 @@ app.configure('development', function () {
 app.use(app.router);
 
 app.get('/', routes.index);
-app.get('/id/:id', words.getWordById);
-app.get('/word', words.getNodeByWord);
-app.get('/etym/:id', words.getEtym);
+app.get('/word/:id', routes.index);
+app.get('/_id', words.getWordById);
+app.get('/_etym/:id', words.getEtym);
+app.get('/_word', words.getNodeByWord);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
