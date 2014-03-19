@@ -22,6 +22,20 @@ svgG = svg.append 'g'
   .attr
     transform: "translate(#{[margin.l, margin.t]})"
 
+svg.append 'defs'
+  .append 'marker'
+  .attr(
+    id: 'arrowMarker'
+    class: 'arrow-marker'
+    viewBox: '0 -5 10 10'
+    refX: 18
+    refY: -1.5
+    markerWidth: 6
+    markerHeight: 6
+    orient: 'auto'
+  ).append 'path'
+    .attr 'd', 'M0,-5L10,0L0,5'
+
 updateDimensions = () ->
   graphDiv = document.getElementById('graph')
   width = graphDiv.clientWidth
@@ -36,15 +50,23 @@ updateDimensions = () ->
 
 showPath = (d) ->
   paths = d.pathId
+  ix = d.index
   paths = if paths.length > 1 then paths.join("'],[data-path='") else paths[0]
   selector = ".node-link[data-path='#{paths}']"
 
   d3.selectAll selector
-    .classed 'active', true
+    .each () ->
+      d3node = d3.select this
+      datum = d3node.datum()
+      if datum.source.index is ix
+        d3node.classed 'active-source', true
+      else
+        d3node.classed 'active-target', true
 
 unshowPath = () ->
   d3.selectAll '.node-link'
-    .classed 'active', false
+    .classed 'active-source', false
+    .classed 'active-target', false
 
 applyEtymData = (etymData) ->
   ###
@@ -101,10 +123,14 @@ applyEtymData = (etymData) ->
   nodeG.append 'svg:title'
     .text (d) -> d.word
 
-  linkLines = links.enter().append 'path'
+  linkG = links.enter().append 'g'
     .attr
       class: 'node-link'
       'data-path': (d) -> d.pathId.toString()
+
+  linkLines = linkG.append 'path'
+    .attr
+      'marker-end': 'url(#arrowMarker)'
 
   tick = () ->
     nodeG.attr
