@@ -49,11 +49,13 @@ getEtym = (req, res) ->
     "where not b-->()"
     "return collect(distinct extract(rel in rels(p) | {
       source: ID(startnode(rel)),
-      target: ID(endnode(rel))
+      target: ID(endnode(rel)),
+      pathId: ID(rel)
     })) as rels, collect(distinct extract(n in nodes(p) | {
       id: ID(n),
       word: n.word,
-      lang: n.lang_name
+      lang: n.lang_name,
+      pathId: []
     })) as nodes"
   ].join('\n')
 

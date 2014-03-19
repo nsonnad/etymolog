@@ -2,7 +2,7 @@ d3 = require 'd3'
 
 margin = { t: 20, r: 20, b: 20, l: 20 }
 initWidth = 900
-initHeight = 500
+initHeight = 700
 etymNodes = []
 etymLinks = []
 
@@ -34,6 +34,18 @@ updateDimensions = () ->
     width: w
     height: h
 
+showPath = (d) ->
+  paths = d.pathId
+  paths = if paths.length > 1 then paths.join("'],[data-path='") else paths[0]
+  selector = ".node-link[data-path='#{paths}']"
+
+  d3.selectAll selector
+    .classed 'active', true
+
+unshowPath = () ->
+  d3.selectAll '.node-link'
+    .classed 'active', false
+
 applyEtymData = (etymData) ->
   ###
   wordData object contains 'rels' key and 'nodes' key.
@@ -53,6 +65,8 @@ applyEtymData = (etymData) ->
     hashLookup[d.id] = d
 
   etymData.rels.forEach (d) ->
+    hashLookup[d.source].pathId.push d.pathId.toString()
+    hashLookup[d.target].pathId.push d.pathId.toString()
     d.source = hashLookup[d.source]
     d.target = hashLookup[d.target]
 
@@ -75,6 +89,8 @@ applyEtymData = (etymData) ->
   nodeG = nodes.enter().append 'g'
     .attr
       class: 'node-g'
+    .on 'mouseover', showPath
+    .on 'mouseout', unshowPath
     .call force.drag
 
   circles = nodeG.append 'circle'
@@ -82,19 +98,20 @@ applyEtymData = (etymData) ->
       class: 'node-circle'
       r: 6
 
-  linkLines = links.enter().append 'line'
+  nodeG.append 'svg:title'
+    .text (d) -> d.word
+
+  linkLines = links.enter().append 'path'
     .attr
       class: 'node-link'
+      'data-path': (d) -> d.pathId.toString()
 
   tick = () ->
     nodeG.attr
       transform: (d) -> "translate(#{[d.x, d.y]})"
 
     linkLines.attr
-      x1: (d) -> d.source.x
-      y1: (d) -> d.source.y
-      x2: (d) -> d.target.x
-      y2: (d) -> d.target.y
+      d: linkArc
 
   force
     .on 'tick', tick
@@ -104,6 +121,12 @@ applyEtymData = (etymData) ->
   return
 
 updateDimensions()
+
+linkArc = (d) ->
+  dx = d.target.x - d.source.x
+  dy = d.target.y - d.source.y
+  dr = Math.sqrt(dx * dx + dy * dy) / 1.5
+  "M#{d.source.x},#{d.source.y}A#{dr},#{dr} 0 0,1#{d.target.x},#{d.target.y}"
 
 module.exports =
   applyEtymData: applyEtymData
