@@ -3,8 +3,14 @@ d3 = require 'd3'
 margin = { t: 20, r: 20, b: 20, l: 20 }
 initWidth = 900
 initHeight = 500
+etymNodes = []
+etymLinks = []
 
 force = d3.layout.force()
+  .nodes etymNodes
+  .links etymLinks
+  .linkDistance 50
+  .charge -100
 
 svg = d3.select '#graph'
   .append 'svg'
@@ -40,36 +46,60 @@ applyEtymData = (etymData) ->
   w = width - margin.l - margin.r
   h = height - margin.t - margin.b
 
+  # create hash lookup to match links and nodes
+  hashLookup = {}
+
+  etymData.nodes.forEach (d) ->
+    hashLookup[d.id] = d
+
+  etymData.rels.forEach (d) ->
+    d.source = hashLookup[d.source]
+    d.target = hashLookup[d.target]
+
   force
-    .nodes etymData.nodes
-    .size [w, h]
+    .nodes d3.values hashLookup
+    .links etymData.rels
 
-  nodes = svgG.selectAll 'node-g'
-    .data force.nodes()
+  linksG = svgG.append('g').attr('class', 'links-g')
+  nodesG = svgG.append('g').attr('class', 'nodes-g')
 
-  nodesG = nodes.enter().append 'g'
+  svgG.selectAll('.node-link').remove()
+  svgG.selectAll('.node-g').remove()
+  
+  nodes = nodesG.selectAll '.node-g'
+    .data force.nodes(), (d) -> d.id
+
+  links = linksG.selectAll '.node-link'
+    .data force.links(), (d) -> d.source.id + '-' + d.target.id
+
+  nodeG = nodes.enter().append 'g'
     .attr
       class: 'node-g'
-
-  nodes.append 'circle'
-    .attr
-      r: 6
     .call force.drag
 
+  circles = nodeG.append 'circle'
+    .attr
+      class: 'node-circle'
+      r: 6
+
+  linkLines = links.enter().append 'line'
+    .attr
+      class: 'node-link'
+
   tick = () ->
-    nodesG.attr
+    nodeG.attr
       transform: (d) -> "translate(#{[d.x, d.y]})"
+
+    linkLines.attr
+      x1: (d) -> d.source.x
+      y1: (d) -> d.source.y
+      x2: (d) -> d.target.x
+      y2: (d) -> d.target.y
 
   force
     .on 'tick', tick
+    .size [w, h]
     .start()
-
-  #rels = svgG.append('g').selectAll 'path'
-    #.data force.links()
-  #.enter().append 'path'
-    #.attr
-      #class: 'node-link'
-
 
   return
 

@@ -18,4 +18,3 @@ with the front-end by doing:
 2. `gulp`
 3. Point your browser to http://localhost:3000
 
-
