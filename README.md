@@ -21,10 +21,17 @@ with the front-end by doing:
 
 ###TODO
 
-* Tooltips on nodes
+####Back-end
+* Deployment to heroku
+  * make sure gulp build process is working
+  * [gulp buildpack](https://github.com/appstack/heroku-buildpack-nodejs-gulp)
+  * import existing db
 * Limit number of nodes returned from Cypher
-* ~~Highlight node of currently selected word~~
 * Change url based on selected word
+
+####Front-end
+* ~~Highlight node of currently selected word~~
+* Tooltips on nodes
 * Allow clicking on node (or in the tooltip) to load its graph
 * Links to wiktionary pages
 * Lots of aesthetic stuff
