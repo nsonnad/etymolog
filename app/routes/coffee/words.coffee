@@ -42,36 +42,44 @@ getNodeByWord = (req, res) ->
 
 getEtym = (req, res) ->
   id = req.params.id
+  params = { id: id }
+  depth = 4
+  
+  variableQuery = (dpth) ->
+    query = [
+      "match p=(a:Word)-[r:ORIGIN_OF*1..#{dpth}]-(b)"
+      "where not b-->() and id(a)=#{id}"
+      "with collect(distinct extract(rel in rels(p) | {
+        source: ID(startnode(rel)),
+        target: ID(endnode(rel)),
+        pathId: ID(rel)
+      })) as rels, collect(distinct extract(n in nodes(p) | {
+        id: ID(n),
+        word: n.word,
+        lang: n.lang_name,
+        pathId: []
+      })) as nodes"
+      "return nodes, rels"
+    ].join('\n')
 
-  query = [
-    "start a=node(#{id})"
-    "match p=(a)-[r:ORIGIN_OF*1..3]-(b)"
-    "where not b-->()"
-    "return collect(distinct extract(rel in rels(p) | {
-      source: ID(startnode(rel)),
-      target: ID(endnode(rel)),
-      pathId: ID(rel)
-    })) as rels, collect(distinct extract(n in nodes(p) | {
-      id: ID(n),
-      word: n.word,
-      lang: n.lang_name,
-      pathId: []
-    })) as nodes"
-  ].join('\n')
+    db.query query, params, (err, results) ->
+      if err then console.error err
+      rels = flatten(results[0].rels)
+      nodes = uniq(flatten(results[0].nodes))
+      if nodes.length < 1000
+        console.log nodes.length
+        response =
+          rels: rels
+          nodes: nodes
+        res.send response
+      else if depth is 2
+        variableQuery(2)
+      else
+        depth--
+        console.log depth
+        variableQuery(depth)
 
-  params =
-    id: id
-
-  db.query query, params, (err, results) ->
-    if err then console.error err
-    rels = flatten(results[0].rels)
-    nodes = uniq(flatten(results[0].nodes))
-
-    response =
-      rels: rels
-      nodes: nodes
-
-    res.send response
+  variableQuery(depth)
 
 module.exports =
   getWordById: getWordById

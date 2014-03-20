@@ -114,6 +114,7 @@ applyEtymData = (etymData) ->
       class: 'node-g'
     .on 'mouseover', showPath
     .on 'mouseout', unshowPath
+    .call force.drag
 
   circles = nodeG.append 'circle'
     .attr
