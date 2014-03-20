@@ -9,8 +9,8 @@ etymLinks = []
 force = d3.layout.force()
   .nodes etymNodes
   .links etymLinks
-  .linkDistance 50
-  .charge -100
+  .linkDistance 80
+  .charge -60
 
 svg = d3.select '#graph'
   .append 'svg'

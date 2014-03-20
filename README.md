@@ -28,3 +28,4 @@ with the front-end by doing:
 * Allow clicking on node (or in the tooltip) to load its graph
 * Links to wiktionary pages
 * Lots of aesthetic stuff
+* Deployment to heroku
