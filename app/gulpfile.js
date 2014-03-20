@@ -145,12 +145,11 @@ gulp.task('default', function (callback) {
   );
 });
 
-gulp.task('build', function (callback) {
+gulp.task('heroku:production', function (callback) {
   runSequence(
     'clean-tmp',
     'clean-build',
     ['server-coffee', 'coffeeify', 'stylus'],
-    ['build-scripts', 'build-styles', 'build-html'],
     callback
   );
 });
