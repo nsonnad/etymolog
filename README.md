@@ -18,3 +18,13 @@ with the front-end by doing:
 2. `gulp`
 3. Point your browser to http://localhost:3000
 
+
+###TODO
+
+* Tooltips on nodes
+* Limit number of nodes returned from Cypher
+* ~~Highlight node of currently selected word~~
+* Change url based on selected word
+* Allow clicking on node (or in the tooltip) to load its graph
+* Links to wiktionary pages
+* Lots of aesthetic stuff

@@ -28,10 +28,10 @@ svg.append 'defs'
     id: 'arrowMarker'
     class: 'arrow-marker'
     viewBox: '0 -5 10 10'
-    refX: 18
-    refY: -1.5
-    markerWidth: 6
-    markerHeight: 6
+    refX: 20
+    refY: 1
+    markerWidth: 5
+    markerHeight: 5
     orient: 'auto'
   ).append 'path'
     .attr 'd', 'M0,-5L10,0L0,5'
@@ -39,7 +39,7 @@ svg.append 'defs'
 updateDimensions = () ->
   graphDiv = document.getElementById('graph')
   width = graphDiv.clientWidth
-  height = Math.min(500, Math.max(250, width / 1.5))
+  height = width
   w = width - margin.l - margin.r
   h = height - margin.t - margin.b
   force.size([w, h])
@@ -81,6 +81,7 @@ applyEtymData = (etymData) ->
   h = height - margin.t - margin.b
 
   # create hash lookup to match links and nodes
+  # adding in the path ids for highlighting
   hashLookup = {}
 
   etymData.nodes.forEach (d) ->
@@ -113,15 +114,17 @@ applyEtymData = (etymData) ->
       class: 'node-g'
     .on 'mouseover', showPath
     .on 'mouseout', unshowPath
-    .call force.drag
 
   circles = nodeG.append 'circle'
     .attr
       class: 'node-circle'
-      r: 6
+      r: 7
 
   nodeG.append 'svg:title'
     .text (d) -> d.word
+
+  d3.select circles[0][0]
+    .classed 'node-zero', true
 
   linkG = links.enter().append 'g'
     .attr
@@ -129,8 +132,8 @@ applyEtymData = (etymData) ->
       'data-path': (d) -> d.pathId.toString()
 
   linkLines = linkG.append 'path'
-    .attr
-      'marker-end': 'url(#arrowMarker)'
+    #.attr
+      #'marker-end': 'url(#arrowMarker)'
 
   tick = () ->
     nodeG.attr
