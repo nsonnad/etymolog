@@ -3,14 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app/app.js"
   },
   "dependencies": {
     "express": "3.4.8",
     "jade": "*",
     "neo4j": "^1.1.0",
     "lodash": "^2.4.1",
-    "select2": "^3.4.5"
+    "select2": "^3.4.5",
+    "jquery": "^2.1.0",
+    "d3": "^3.4.3"
   },
   "devDependencies": {
     "run-sequence": "^0.3.6",
@@ -29,5 +31,9 @@
     "tiny-lr": "0.0.5",
     "coffeeify": "^0.6.0",
     "express-livereload": "0.0.24"
+  },
+  "engines": {
+    "node": "0.10.26",
+    "npm": "1.4.4"
   }
 }
