@@ -1,3 +1,5 @@
+process.env.PWD = process.cwd() + '/app/';
+
 // Requirements
 var gulp            = require('gulp');
 
@@ -18,22 +20,22 @@ var lrport = 35729;
 
 var paths = {
   views: {
-    jade: __dirname + '/views/coffee',
-    js: __dirname + '/views'
+    jade: process.env.PWD + '/views/coffee',
+    js: process.env.PWD + '/views'
   },
   models: {
-    coffee: __dirname + '/models/coffee',
-    js: __dirname + '/models'
+    coffee: process.env.PWD + '/models/coffee',
+    js: process.env.PWD + '/models'
   },
   routes: {
-    coffee: __dirname + '/routes/coffee',
-    js: __dirname + '/routes'
+    coffee: process.env.PWD + '/routes/coffee',
+    js: process.env.PWD + '/routes'
   },
   public: {
-    coffee: __dirname + '/public/coffee',
-    scripts: __dirname + '/public/scripts',
-    styl: __dirname + '/public/styl',
-    styles: __dirname + '/public/styles'
+    coffee: process.env.PWD + '/public/coffee',
+    scripts: process.env.PWD + '/public/scripts',
+    styl: process.env.PWD + '/public/styl',
+    styles: process.env.PWD + '/public/styles'
   }
 };
 
@@ -76,9 +78,9 @@ gulp.task('stylus', function () {
 
 // Inject livereload script into index.html
 gulp.task('embedLivereload', function () {
-  return gulp.src(__dirname + '/index.html')
+  return gulp.src(process.env.PWD + '/index.html')
     .pipe(embedlivereload())
-    .pipe(gulp.dest(__dirname));
+    .pipe(gulp.dest(process.env.PWD));
 });
 
 // Copy compiled css to build
@@ -109,7 +111,7 @@ gulp.task('clean-build', function () {
 
 gulp.task('nodemon', function () {
   nodemon({ 
-    script: 'app.js',
+    script: 'app/app.js',
     ext: 'js jade coffee'
   });
 });
