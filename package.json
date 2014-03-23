@@ -13,7 +13,7 @@
     "lodash": "^2.4.1",
     "select2": "^3.4.5",
     "jquery": "^2.1.0",
-    "d3": "^3.4.3"
+    "d3": "^3.4.3",
     "run-sequence": "^0.3.6",
     "gulp-embedlr": "^0.5.2",
     "gulp-clean": "^0.2.4",
@@ -26,7 +26,7 @@
     "gulp": "^3.5.2",
     "gulp-nodemon": "^1.0.0",
     "gulp-coffee": "^1.4.1",
-    "coffeeify": "^0.6.0",
+    "coffeeify": "^0.6.0"
   },
   "devDependencies": {
     "connect-livereload": "^0.3.2",
