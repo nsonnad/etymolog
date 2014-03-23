@@ -148,7 +148,6 @@ gulp.task('default', function (callback) {
 gulp.task('heroku:production', function (callback) {
   runSequence(
     'clean-tmp',
-    'clean-build',
     ['server-coffee', 'coffeeify', 'stylus'],
     callback
   );
