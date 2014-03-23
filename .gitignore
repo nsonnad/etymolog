@@ -1,12 +1,10 @@
-neo4j
 data/input
-output
-py/*.pyc
-node_modules/
-neo4j-*
+data/output
+data/db
+data/py/*.pyc
 neo4j
+neo4j-*
+node_modules
 app/routes/*.js
 app/public/scripts
 app/public/styles
-
-data/db
