@@ -13,9 +13,7 @@
     "lodash": "^2.4.1",
     "select2": "^3.4.5",
     "jquery": "^2.1.0",
-    "d3": "^3.4.3"
-  },
-  "devDependencies": {
+    "d3": "^3.4.3",
     "run-sequence": "^0.3.6",
     "gulp-embedlr": "^0.5.2",
     "gulp-clean": "^0.2.4",
@@ -26,11 +24,13 @@
     "gulp-stylus": "0.0.13",
     "gulp-browserify": "^0.4.6",
     "gulp": "^3.5.2",
-    "connect-livereload": "^0.3.2",
     "gulp-nodemon": "^1.0.0",
     "gulp-coffee": "^1.4.1",
+    "coffeeify": "^0.6.0"
+  },
+  "devDependencies": {
+    "connect-livereload": "^0.3.2",
     "tiny-lr": "0.0.5",
-    "coffeeify": "^0.6.0",
     "express-livereload": "0.0.24"
   },
   "engines": {

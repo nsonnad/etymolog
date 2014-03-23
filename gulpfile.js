@@ -1,5 +1,5 @@
-appDir = process.cwd();
-var appDir = appDir + '/app/';
+process.env.PWD = process.cwd();
+var appDir = process.env.PWD + '/app/';
 
 // Requirements
 var gulp            = require('gulp');
