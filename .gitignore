@@ -1,6 +1,5 @@
 neo4j
-data/input/*
-!data/input/etymwn-20130208.zip
+data/input
 output
 py/*.pyc
 node_modules
