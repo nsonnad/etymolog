@@ -2,9 +2,9 @@ neo4j
 data/input
 output
 py/*.pyc
-node_modules
-neo4j-community-2.0.0
-neo7j
+node_modules/
+neo4j-*
+neo4j
 app/routes/*.js
 app/public/scripts
 app/public/styles
