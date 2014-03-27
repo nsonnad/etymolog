@@ -1,7 +1,6 @@
 process.env.PWD = process.cwd();
 var appDir = process.env.PWD + '/app/';
 var NODE_ENV = process.env.NODE_ENV;
-console.log('GULPPPPPPP ');
 
 // Requirements
 var gulp            = require('gulp');
@@ -9,7 +8,6 @@ var gulp            = require('gulp');
 // Gulp plugins
 var browserify      = require('gulp-browserify');
 var coffee          = require('gulp-coffee');
-var gulpif          = require('gulp-if');
 var stylus          = require('gulp-stylus');
 var concat          = require('gulp-concat');
 var uglify          = require('gulp-uglify');
@@ -20,11 +18,6 @@ var nodemon         = require('gulp-nodemon');
 
 var isDevEnv = NODE_ENV == 'development';
 
-if (isDevEnv) {
-  var lrport = 35729;
-  var livereload = require('gulp-livereload');
-  var lrserver = require('tiny-lr')();
-}
 
 var paths = {
   views: {
@@ -55,12 +48,10 @@ var outputFiles = {
 gulp.task('server-coffee', function () {
   gulp.src(paths.models.coffee + '/*.coffee')
     .pipe(coffee())
-    .pipe(gulp.dest(paths.models.js))
-    .pipe(gulpif(isDevEnv, livereload(lrserver)));
+    .pipe(gulp.dest(paths.models.js));
   gulp.src(paths.routes.coffee + '/*.coffee')
     .pipe(coffee())
-    .pipe(gulp.dest(paths.routes.js))
-    .pipe(gulpif(isDevEnv, livereload(lrserver)));
+    .pipe(gulp.dest(paths.routes.js));
 });
 
 // Load modules with browserify, compile coffee and concat
@@ -71,8 +62,7 @@ gulp.task('coffeeify', function () {
       extensions: ['.coffee']
     }))
     .pipe(concat(outputFiles.js))
-    .pipe(gulp.dest(paths.public.scripts))
-    .pipe(gulpif(isDevEnv, livereload(lrserver)));
+    .pipe(gulp.dest(paths.public.scripts));
 });
 
 gulp.task('stylus', function () {
@@ -80,15 +70,7 @@ gulp.task('stylus', function () {
     .pipe(stylus())
     .pipe(concat(outputFiles.css))
     .pipe(minifyCss({relativeTo: './public/styl'}))
-    .pipe(gulp.dest(paths.public.styles))
-    .pipe(gulpif(isDevEnv, livereload(lrserver)));
-});
-
-// Inject livereload script into index.html
-gulp.task('embedLivereload', function () {
-  return gulp.src(appDir + '/index.html')
-    .pipe(gulpif(isDevEnv, embedlivereload()))
-    .pipe(gulp.dest(appDir));
+    .pipe(gulp.dest(paths.public.styles));
 });
 
 gulp.task('clean-tmp', function () {
@@ -98,36 +80,54 @@ gulp.task('clean-tmp', function () {
     .pipe(clean({ force: true }));
 });
 
-gulp.task('clean-build', function () {
-  return gulp.src(dirs.build, { read: false })
-    .pipe(clean({ force: true }));
-});
 
-gulp.task('nodemon', function () {
-  nodemon({ 
-    script: appDir + 'app.js',
-    ext: 'js jade coffee'
+if (isDevEnv) {
+  var lrport = 35729;
+  var livereload = require('gulp-livereload');
+  var lrserver = require('tiny-lr')();
+  lrserver.listen(lrport);
+
+  var notifyLivereload = function (e) {
+    var fileName = require('path').relative(appDir, e.path);
+
+    lrserver.changed({
+      body: {
+        files: fileName
+      }
+    });
+  };
+
+  // Inject livereload script into index.html
+  gulp.task('watch', function () {
+    gulp.watch(paths.models.coffee + '/*.coffee', ['server-coffee'])
+      .on('change', notifyLivereload);
+    gulp.watch(paths.routes.coffee + '/*.coffee', ['server-coffee'])
+      .on('change', notifyLivereload);
+    gulp.watch(paths.public.coffee + '/*.coffee', ['coffeeify'])
+      .on('change', notifyLivereload);
+    gulp.watch(paths.public.styl + '/*.styl', ['stylus'])
+      .on('change', notifyLivereload);
+
+    console.log('Watching for changes...');
   });
-});
 
-gulp.task('watch', function () {
-  gulp.watch(paths.models.coffee + '/*.coffee', ['server-coffee']);
-  gulp.watch(paths.routes.coffee + '/*.coffee', ['server-coffee']);
-  gulp.watch(paths.public.coffee + '/*.coffee', ['coffeeify']);
-  gulp.watch(paths.public.styl + '/*.styl', ['stylus']);
+  gulp.task('nodemon', function () {
+    nodemon({ 
+      script: appDir + 'app.js',
+      ext: 'js jade coffee'
+    });
+  });
 
-  console.log('Watching for changes...');
-});
-
-gulp.task('default', function (callback) {
-  runSequence(
-    'clean-tmp',
-    ['server-coffee', 'coffeeify', 'stylus'],
-    'watch',
-    'nodemon',
-    callback
-  );
-});
+  gulp.task('default', function (callback) {
+    runSequence(
+      'clean-tmp',
+      ['server-coffee', 'coffeeify', 'stylus'],
+      'watch',
+      'nodemon',
+      callback
+    );
+  });
+}
 
 gulp.task('heroku:', function (callback) {
   runSequence(

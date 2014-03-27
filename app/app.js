@@ -22,8 +22,7 @@ app.use(express.methodOverride());
 app.use(express.static(path.join(process.env.PWD, 'public')));
 
 app.configure('development', function () {
-  var livereload = require('express-livereload');
-  livereload(app, config={});
+  app.use(require('connect-livereload')());
 });
 
 app.use(app.router);
