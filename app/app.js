@@ -1,16 +1,16 @@
-process.env.PWD = process.cwd();
+process.env.PWD = __dirname || process.cwd();
 /**
  * Module dependencies.
  */
 
 var express = require('express');
-var routes = require('./routes');
 var http = require('http');
 var path = require('path');
 var livereload = require('express-livereload');
+var routes = require('./routes');
+var words = require('./routes/words');
 
 var app = express();
-var words = require('./routes/words');
 var liveReloadPort = 35729;
 
 // all environments
@@ -32,9 +32,9 @@ app.use(app.router);
 
 app.get('/', routes.index);
 app.get('/word/:id', routes.index);
-app.get('/_id', words.getWordById);
-app.get('/_etym/:id', words.getEtym);
-app.get('/_word', words.getNodeByWord);
+app.get('/_id', routes.words.getWordById);
+app.get('/_etym/:id', routes.words.getEtym);
+app.get('/_word', routes.words.getNodeByWord);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
