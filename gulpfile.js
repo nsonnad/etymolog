@@ -1,5 +1,5 @@
-appDir = process.cwd();
-var appDir = appDir + '/app/';
+process.env.PWD = process.cwd();
+var appDir = process.env.PWD + '/app/';
 
 // Requirements
 var gulp            = require('gulp');
@@ -116,13 +116,6 @@ gulp.task('nodemon', function () {
     ext: 'js jade coffee'
   });
 });
-
-//gulp.task('server', function () {
-  //http.createServer(
-    //ecstatic({ root: dirs.tmp })
-  //).listen(8080);
-  //console.log('Listening on 8080...');
-//});
 
 gulp.task('serve-lr', function () {
   lrserver.listen(lrport);
