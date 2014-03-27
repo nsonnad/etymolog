@@ -141,7 +141,7 @@ gulp.task('default', function (callback) {
   );
 });
 
-gulp.task('heroku:production', function (callback) {
+gulp.task('heroku:', function (callback) {
   runSequence(
     'clean-tmp',
     ['server-coffee', 'coffeeify', 'stylus'],
