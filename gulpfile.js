@@ -1,5 +1,6 @@
 process.env.PWD = process.cwd();
 var appDir = process.env.PWD + '/app/';
+var NODE_ENV = process.env.NODE_ENV;
 
 // Requirements
 var gulp            = require('gulp');
@@ -12,12 +13,8 @@ var concat          = require('gulp-concat');
 var uglify          = require('gulp-uglify');
 var minifyCss       = require('gulp-minify-css');
 var runSequence     = require('run-sequence');
-var livereload      = require('gulp-livereload');
-var lrserver        = require('tiny-lr')();
 var clean           = require('gulp-clean');
 var nodemon         = require('gulp-nodemon');
-
-var lrport = 35729;
 
 var paths = {
   views: {
@@ -45,44 +42,52 @@ var outputFiles = {
   js: 'main.js'
 };
 
-gulp.task('server-coffee', function () {
-  gulp.src(paths.models.coffee + '/*.coffee')
-    .pipe(coffee())
-    .pipe(gulp.dest(paths.models.js))
-    .pipe(livereload(lrserver));
-  gulp.src(paths.routes.coffee + '/*.coffee')
-    .pipe(coffee())
-    .pipe(gulp.dest(paths.routes.js))
-    .pipe(livereload(lrserver));
-});
+if (NODE_ENV == 'development') {
+  console.log('dev');
+  var lrport = 35729;
+  var livereload = require('gulp-livereload');
+  var lrserver = require('tiny-lr')();
 
-// Load modules with browserify, compile coffee and concat
-gulp.task('coffeeify', function () {
-  return gulp.src(paths.public.coffee + '/main.coffee', {read: false })
-    .pipe(browserify({
-      transform: ['coffeeify'],
-      extensions: ['.coffee']
-    }))
-    .pipe(concat(outputFiles.js))
-    .pipe(gulp.dest(paths.public.scripts))
-    .pipe(livereload(lrserver));
-});
+  gulp.task('server-coffee', function () {
+    gulp.src(paths.models.coffee + '/*.coffee')
+      .pipe(coffee())
+      .pipe(gulp.dest(paths.models.js))
+      .pipe(livereload(lrserver));
+    gulp.src(paths.routes.coffee + '/*.coffee')
+      .pipe(coffee())
+      .pipe(gulp.dest(paths.routes.js))
+      .pipe(livereload(lrserver));
+  });
 
-gulp.task('stylus', function () {
-  return gulp.src(paths.public.styl + '/*.styl')
-    .pipe(stylus())
-    .pipe(concat(outputFiles.css))
-    .pipe(minifyCss({relativeTo: './public/styl'}))
-    .pipe(gulp.dest(paths.public.styles))
-    .pipe(livereload(lrserver));
-});
+  // Load modules with browserify, compile coffee and concat
+  gulp.task('coffeeify', function () {
+    return gulp.src(paths.public.coffee + '/main.coffee', {read: false })
+      .pipe(browserify({
+        transform: ['coffeeify'],
+        extensions: ['.coffee']
+      }))
+      .pipe(concat(outputFiles.js))
+      .pipe(gulp.dest(paths.public.scripts))
+      .pipe(livereload(lrserver));
+  });
 
-// Inject livereload script into index.html
-gulp.task('embedLivereload', function () {
-  return gulp.src(appDir + '/index.html')
-    .pipe(embedlivereload())
-    .pipe(gulp.dest(appDir));
-});
+  gulp.task('stylus', function () {
+    return gulp.src(paths.public.styl + '/*.styl')
+      .pipe(stylus())
+      .pipe(concat(outputFiles.css))
+      .pipe(minifyCss({relativeTo: './public/styl'}))
+      .pipe(gulp.dest(paths.public.styles))
+      .pipe(livereload(lrserver));
+  });
+
+  // Inject livereload script into index.html
+  gulp.task('embedLivereload', function () {
+    return gulp.src(appDir + '/index.html')
+      .pipe(embedlivereload())
+      .pipe(gulp.dest(appDir));
+  });
+}
+
 
 // Copy compiled css to build
 gulp.task('build-styles', function () {
@@ -117,10 +122,6 @@ gulp.task('nodemon', function () {
   });
 });
 
-gulp.task('serve-lr', function () {
-  lrserver.listen(lrport);
-});
-
 gulp.task('watch', function () {
   gulp.watch(paths.models.coffee + '/*.coffee', ['server-coffee']);
   gulp.watch(paths.routes.coffee + '/*.coffee', ['server-coffee']);
@@ -134,7 +135,6 @@ gulp.task('default', function (callback) {
   runSequence(
     'clean-tmp',
     ['server-coffee', 'coffeeify', 'stylus'],
-    //'serve-lr',
     'watch',
     'nodemon',
     callback
