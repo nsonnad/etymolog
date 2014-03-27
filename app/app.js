@@ -6,12 +6,9 @@ process.env.PWD = __dirname || process.cwd();
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var livereload = require('express-livereload');
 var routes = require('./routes');
-var words = require('./routes/words');
 
 var app = express();
-var liveReloadPort = 35729;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -25,6 +22,7 @@ app.use(express.methodOverride());
 app.use(express.static(path.join(process.env.PWD, 'public')));
 
 app.configure('development', function () {
+  var livereload = require('express-livereload');
   livereload(app, config={});
 });
 
