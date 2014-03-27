@@ -90,21 +90,6 @@ gulp.task('embedLivereload', function () {
     .pipe(gulp.dest(appDir));
 });
 
-
-// Copy compiled css to build
-gulp.task('build-styles', function () {
-  return gulp.src(paths.tmp.styles + '/' + outputFiles.css)
-    .pipe(minifyCss())
-    .pipe(gulp.dest(paths.build.styles));
-});
-
-// Copy compiled js to build
-gulp.task('build-scripts', function () {
-  return gulp.src(paths.tmp.scripts + '/' + outputFiles.js)
-    .pipe(uglify())
-    .pipe(gulp.dest(paths.build.scripts));
-});
-
 gulp.task('clean-tmp', function () {
   gulp.src(paths.public.scripts, { read: false })
     .pipe(clean({ force: true }));
