@@ -1,6 +1,7 @@
 process.env.PWD = process.cwd();
 var appDir = process.env.PWD + '/app/';
 var NODE_ENV = process.env.NODE_ENV;
+console.log('GULPPPPPPP ');
 
 // Requirements
 var gulp            = require('gulp');
