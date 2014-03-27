@@ -1,4 +1,4 @@
-
+process.env.PWD = process.cwd();
 /**
  * Module dependencies.
  */
@@ -15,14 +15,14 @@ var liveReloadPort = 35729;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(process.env.PWD, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(process.env.PWD, 'public')));
 
 app.configure('development', function () {
   livereload(app, config={});
