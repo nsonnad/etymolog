@@ -26,7 +26,8 @@
     "gulp": "^3.5.2",
     "gulp-nodemon": "^1.0.0",
     "gulp-coffee": "^1.4.1",
-    "coffeeify": "^0.6.0"
+    "coffeeify": "^0.6.0",
+    "gulp-if": "0.0.5"
   },
   "devDependencies": {
     "connect-livereload": "^0.3.2",
