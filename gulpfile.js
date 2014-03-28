@@ -18,7 +18,6 @@ var nodemon         = require('gulp-nodemon');
 
 var isDevEnv = NODE_ENV == 'development';
 
-
 var paths = {
   views: {
     jade: appDir + '/views/coffee',
