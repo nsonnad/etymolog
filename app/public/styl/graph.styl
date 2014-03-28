@@ -2,16 +2,19 @@ div#graph
   .node-link
     fill none
     stroke $light-pink
-    stroke-width 2px
+    stroke-width 1.5px
     stroke-opacity 0.8
     &.active-source
+      stroke-width 2px
       stroke $hilight-source
       stroke-opacity 1.0
     &.active-target
+      stroke-width 2px
       stroke $hilight-target
       stroke-opacity 1.0
   .node-circle
     fill $dark-pink
+    cursor pointer
     &.node-zero
       stroke $dark-pink
       stroke-width 3px

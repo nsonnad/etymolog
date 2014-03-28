@@ -1,4 +1,5 @@
 d3 = require 'd3'
+require './vendor/d3-tip/index.js'
 
 margin = { t: 20, r: 20, b: 20, l: 20 }
 initWidth = 900
@@ -22,19 +23,24 @@ svgG = svg.append 'g'
   .attr
     transform: "translate(#{[margin.l, margin.t]})"
 
-svg.append 'defs'
-  .append 'marker'
-  .attr(
-    id: 'arrowMarker'
-    class: 'arrow-marker'
-    viewBox: '0 -5 10 10'
-    refX: 20
-    refY: 1
-    markerWidth: 5
-    markerHeight: 5
-    orient: 'auto'
-  ).append 'path'
-    .attr 'd', 'M0,-5L10,0L0,5'
+tooltip = d3.tip()
+  .attr({ class: 'tooltip' })
+  .offset [-10, 0]
+  .html (d) -> "#{d.word} - #{d.lang}"
+
+#svg.append 'defs'
+  #.append 'marker'
+  #.attr(
+    #id: 'arrowMarker'
+    #class: 'arrow-marker'
+    #viewBox: '0 -5 10 10'
+    #refX: 20
+    #refY: 1
+    #markerWidth: 5
+    #markerHeight: 5
+    #orient: 'auto'
+  #).append 'path'
+    #.attr 'd', 'M0,-5L10,0L0,5'
 
 updateDimensions = () ->
   graphDiv = document.getElementById('graph')
@@ -49,6 +55,7 @@ updateDimensions = () ->
     height: h
 
 showPath = (d) ->
+  tooltip.show(d)
   paths = d.pathId
   ix = d.index
   paths = if paths.length > 1 then paths.join("'],[data-path='") else paths[0]
@@ -63,7 +70,8 @@ showPath = (d) ->
       else
         d3node.classed 'active-target', true
 
-unshowPath = () ->
+unshowPath = (d) ->
+  tooltip.hide(d)
   d3.selectAll '.node-link'
     .classed 'active-source', false
     .classed 'active-target', false
@@ -120,9 +128,6 @@ applyEtymData = (etymData) ->
       class: 'node-circle'
       r: 7
 
-  nodeG.append 'svg:title'
-    .text (d) -> d.word
-
   d3.select circles[0][0]
     .classed 'node-zero', true
 
@@ -136,6 +141,7 @@ applyEtymData = (etymData) ->
   nodeG
     .call(d3.behavior.drag().origin((d) -> return d)
     .on 'drag', (d) ->
+      tooltip.hide()
       d.x = d3.event.x
       d.y = d3.event.y
       d3.select this
@@ -168,6 +174,7 @@ applyEtymData = (etymData) ->
   force.alpha(0.08)
   return
 
+svgG.call tooltip
 updateDimensions()
 
 linkArc = (d) ->
