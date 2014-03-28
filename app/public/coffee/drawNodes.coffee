@@ -114,7 +114,6 @@ applyEtymData = (etymData) ->
       class: 'node-g'
     .on 'mouseover', showPath
     .on 'mouseout', unshowPath
-    .call force.drag
 
   circles = nodeG.append 'circle'
     .attr
@@ -133,8 +132,24 @@ applyEtymData = (etymData) ->
       'data-path': (d) -> d.pathId.toString()
 
   linkLines = linkG.append 'path'
-    #.attr
-      #'marker-end': 'url(#arrowMarker)'
+
+  nodeG
+    .call(d3.behavior.drag().origin((d) -> return d)
+    .on 'drag', (d) ->
+      d.x = d3.event.x
+      d.y = d3.event.y
+      d3.select this
+        .attr
+          transform: (d) -> "translate(#{[d.x, d.y]})"
+
+      linkLines.filter (l) -> l.source is d
+        .attr
+          d: linkArc
+
+      linkLines.filter (l) -> l.target is d
+        .attr
+          d: linkArc
+  )
 
   tick = () ->
     nodeG.attr
@@ -146,8 +161,11 @@ applyEtymData = (etymData) ->
   force
     .on 'tick', tick
     .size [w, h]
-    .start()
 
+  force.start()
+  for i in [50..0]
+    force.tick()
+  force.alpha(0.08)
   return
 
 updateDimensions()

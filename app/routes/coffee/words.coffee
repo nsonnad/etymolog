@@ -41,39 +41,35 @@ getEtym = (req, res) ->
   id = req.params.id
   params = { id: id }
   depth = 4
+  minDepth = 2
   
   variableQuery = (dpth) ->
     query = [
       "match p=(a:Word)-[r:ORIGIN_OF*1..#{dpth}]-(b)"
       "where not b-->() and id(a)=#{id}"
-      "with collect(distinct extract(rel in rels(p) | {
+      "return collect(extract(rel in rels(p) | {
         source: ID(startnode(rel)),
         target: ID(endnode(rel)),
         pathId: ID(rel)
-      })) as rels, collect(distinct extract(n in nodes(p) | {
+      })) as rels, collect(extract(n in nodes(p) | {
         id: ID(n),
         word: n.word,
         lang: n.lang_name,
         pathId: []
       })) as nodes"
-      "return nodes, rels"
     ].join('\n')
 
     db.query query, params, (err, results) ->
       if err then console.error err
       rels = flatten(results[0].rels)
-      nodes = uniq(flatten(results[0].nodes))
-      if nodes.length < 1000
-        console.log nodes.length
+      nodes = flatten(results[0].nodes)
+      if nodes.length < 2000 or depth is minDepth
         response =
           rels: rels
           nodes: nodes
         res.send response
-      else if depth is 2
-        variableQuery(2)
       else
         depth--
-        console.log depth
         variableQuery(depth)
 
   variableQuery(depth)
