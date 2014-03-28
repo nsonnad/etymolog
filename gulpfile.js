@@ -128,7 +128,7 @@ if (isDevEnv) {
   });
 }
 
-gulp.task('heroku:', function (callback) {
+gulp.task('heroku:production', function (callback) {
   runSequence(
     'clean-tmp',
     ['server-coffee', 'coffeeify', 'stylus'],
