@@ -1,10 +1,11 @@
-neo4j = require 'neo4j'
+neo4j = require('neo4j')
 flatten = require('lodash').flatten
 uniq = require('lodash').uniq
 
-db = new neo4j.GraphDatabase(
-  process.env.GRAPHENDB_URL || 'http://localhost:7474'
-)
+dbUrl = process.env.GRAPHENDB_URL || 'http://localhost:7474'
+console.log dbUrl
+
+db = new neo4j.GraphDatabase(dbUrl)
 
 getWordById = (req, res) ->
   id = req.query.q
