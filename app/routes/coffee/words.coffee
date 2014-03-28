@@ -6,8 +6,6 @@ db = new neo4j.GraphDatabase(
   process.env.GRAPHENDB_URL || 'http://localhost:7474'
 )
 
-console.log process.env.GRAPHENDB_URL
-
 getWordById = (req, res) ->
   id = req.query.q
 

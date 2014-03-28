@@ -1,4 +1,5 @@
 process.env.PWD = __dirname || process.cwd();
+console.log(process.env);
 /**
  * Module dependencies.
  */
