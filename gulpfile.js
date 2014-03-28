@@ -1,6 +1,5 @@
 process.env.PWD = process.cwd();
 var appDir = process.env.PWD + '/app/';
-var NODE_ENV = process.env.NODE_ENV;
 
 // Requirements
 var gulp            = require('gulp');
@@ -15,8 +14,6 @@ var minifyCss       = require('gulp-minify-css');
 var runSequence     = require('run-sequence');
 var clean           = require('gulp-clean');
 var nodemon         = require('gulp-nodemon');
-
-var isDevEnv = NODE_ENV == 'development';
 
 var paths = {
   views: {
@@ -79,8 +76,7 @@ gulp.task('clean-tmp', function () {
     .pipe(clean({ force: true }));
 });
 
-
-if (isDevEnv) {
+if (process.env.NODE_ENV == 'development') {
   var lrport = 35729;
   var livereload = require('gulp-livereload');
   var lrserver = require('tiny-lr')();
