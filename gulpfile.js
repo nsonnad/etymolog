@@ -94,13 +94,16 @@ if (process.env.NODE_ENV == 'development') {
 
   // Inject livereload script into index.html
   gulp.task('watch', function () {
-    gulp.watch(paths.models.coffee + '/*.coffee', ['server-coffee'])
+    gulp.watch(paths.routes.coffee + '/*.coffee', ['server-coffee']);
+    gulp.watch(paths.routes + '/*.js')
       .on('change', notifyLivereload);
-    gulp.watch(paths.routes.coffee + '/*.coffee', ['server-coffee'])
+
+    gulp.watch(paths.public.coffee + '/*.coffee', ['coffeeify']);
+    gulp.watch(paths.public.scripts + '/*.js')
       .on('change', notifyLivereload);
-    gulp.watch(paths.public.coffee + '/*.coffee', ['coffeeify'])
-      .on('change', notifyLivereload);
-    gulp.watch(paths.public.styl + '/*.styl', ['stylus'])
+
+    gulp.watch(paths.public.styl + '/*.styl', ['stylus']);
+    gulp.watch(paths.public.styles + '/*.css')
       .on('change', notifyLivereload);
 
     console.log('Watching for changes...');
