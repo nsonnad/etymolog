@@ -2,8 +2,8 @@ neo4j = require('neo4j')
 flatten = require('lodash').flatten
 uniq = require('lodash').uniq
 
-dbUrl = process.env.GRAPHENDB_URL || 'http://localhost:7474'
-console.log dbUrl
+dbUrl = process.env['GRAPHENDB_URL'] || 'http://localhost:7474'
+console.log 'DATABASE URL:', dbUrl
 
 db = new neo4j.GraphDatabase(dbUrl)
 
