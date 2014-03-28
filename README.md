@@ -22,11 +22,11 @@ with the front-end by doing:
 ###TODO
 
 ####Back-end
-* Deployment to heroku
-  * make sure gulp build process is working
-  * [gulp buildpack](https://github.com/appstack/heroku-buildpack-nodejs-gulp)
-  * import existing db
-* Limit number of nodes returned from Cypher
+* ~~Deployment to heroku~~
+  * ~~make sure gulp build process is working~~
+  * ~~[gulp buildpack](https://github.com/appstack/heroku-buildpack-nodejs-gulp)~~
+  * ~~import existing db~~
+* ~~Limit number of nodes returned from Cypher~~ (sort of works)
 * Change url based on selected word
 
 ####Front-end
@@ -35,3 +35,4 @@ with the front-end by doing:
 * Allow clicking on node (or in the tooltip) to load its graph
 * Links to wiktionary pages
 * Lots of aesthetic stuff
+
