@@ -3,10 +3,10 @@ flatten = require('lodash').flatten
 uniq = require('lodash').uniq
 
 db = new neo4j.GraphDatabase(
-  process.env['NEO4J_URL'] or
-  process.env['GRAPHENDB_URL'] or
-  'http://localhost:7474'
+  process.env.GRAPHENDB_URL || 'http://localhost:7474'
 )
+
+console.log process.env.GRAPHENDB_URL
 
 getWordById = (req, res) ->
   id = req.query.q
@@ -25,7 +25,6 @@ getWordById = (req, res) ->
 
 getNodeByWord = (req, res) ->
   q = req.query.q
-  console.log q
   query = [
     "match (n:Word) where n.word =~ {word}"
     "return {id: ID(n), wordName: n.word, lang: n.lang_name} as word"
