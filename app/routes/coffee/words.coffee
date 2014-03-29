@@ -56,17 +56,23 @@ getEtym = (req, res) ->
         word: n.word,
         lang: n.lang_name,
         pathId: []
-      })) as nodes"
+      })) as nodes, {
+        word: a.word,
+        lang: a.lang_name,
+        id: #{id}
+      } as node"
     ].join('\n')
 
     db.query query, params, (err, results) ->
       if err then console.error err
       rels = flatten(results[0].rels)
       nodes = flatten(results[0].nodes)
+      node = results[0].node
       if nodes.length < 2000 or depth is minDepth
         response =
           rels: rels
           nodes: nodes
+          node: node
         res.send response
       else
         depth--

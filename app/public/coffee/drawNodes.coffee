@@ -6,6 +6,7 @@ initWidth = 900
 initHeight = 700
 etymNodes = []
 etymLinks = []
+graphDiv = document.getElementById('graph')
 
 force = d3.layout.force()
   .nodes etymNodes
@@ -82,11 +83,13 @@ applyEtymData = (etymData) ->
   'nodes' contains unique list of all words related to chosen word
   'rels' contains ids of the relevant origin and target nodes
   ###
-  graphDiv = document.getElementById('graph')
   width = graphDiv.clientWidth
   height = Math.min(500, Math.max(250, width / 1.5))
   w = width - margin.l - margin.r
   h = height - margin.t - margin.b
+  newUrl = "word/#{etymData.node.id.toString()}"
+
+  history.pushState(null, etymData.node.word, newUrl)
 
   # create hash lookup to match links and nodes
   # adding in the path ids for highlighting

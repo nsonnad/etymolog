@@ -4,6 +4,7 @@ applyEtymData = require('./drawNodes').applyEtymData
 
 wordUrl = '/_word'
 currUrl = window.location.pathname
+history.replaceState { path: window.location.href}, ''
 
 getEtymById = (id) ->
   $.ajax
@@ -49,4 +50,5 @@ $ '#word-selector'
 
 $ '#word-selector'
   .on 'change', (e) ->
+    e.preventDefault()
     getEtymById e.val
