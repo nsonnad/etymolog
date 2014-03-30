@@ -87,9 +87,6 @@ applyEtymData = (etymData) ->
   height = Math.min(500, Math.max(250, width / 1.5))
   w = width - margin.l - margin.r
   h = height - margin.t - margin.b
-  newUrl = "word/#{etymData.node.id.toString()}"
-
-  history.pushState(null, etymData.node.word, newUrl)
 
   # create hash lookup to match links and nodes
   # adding in the path ids for highlighting

@@ -4,20 +4,27 @@ applyEtymData = require('./drawNodes').applyEtymData
 
 wordUrl = '/_word'
 currUrl = window.location.pathname
-history.replaceState { path: window.location.href}, ''
+history.pushState { path: window.location.href}, ''
+m = currUrl.match /\/word\/(\d+)$/
 
 getEtymById = (id) ->
   $.ajax
     url: '/_etym/' + id
-    success: (data) -> applyEtymData data
+    success: (data) ->
+      if m
+        newUrl = id.toString()
+      else
+        newUrl = "word/#{id.toString()}"
+      history.pushState(id, data.node.word, newUrl)
+      applyEtymData data
     dataType: 'json'
 
-if currUrl.length > 1
-  m = currUrl.match /\/word\/(\d+)$/
-  if m
-    id = m[1]
-    $('#word-selector').val(id)
-    getEtymById id
+updateSelect = (newId) ->
+  $('#word-selector').val(newId)
+  getEtymById newId
+
+if m
+  updateSelect(m[1])
 
 formatWordResult = (wordData) ->
   "<p>#{wordData.word.wordName} - #{wordData.word.lang}</p>"
@@ -52,3 +59,15 @@ $ '#word-selector'
   .on 'change', (e) ->
     e.preventDefault()
     getEtymById e.val
+
+popped = ('state' in window.history)
+initialURL = location.href
+$(window).bind 'popstate', (event) ->
+  initialPop = !popped && location.href == initialURL
+  popped = true
+  if initialPop
+    return
+  else
+    newId = event.originalEvent.state
+    $('#word-selector').select2('val', newId)
+    getEtymById newId
