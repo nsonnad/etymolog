@@ -15,7 +15,7 @@ getEtymById = (id) ->
         newUrl = id.toString()
       else
         newUrl = "word/#{id.toString()}"
-      history.pushState(id, data.nodes[0].word, newUrl)
+      history.pushState(id, data.node.word, newUrl)
       applyEtymData data
     dataType: 'json'
 

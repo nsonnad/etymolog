@@ -31,7 +31,7 @@ getNodeByWord = (req, res) ->
 
   # semi-fuzzy search
   params =
-    word: "(?i)#{q}.*"
+    word: "(?i)#{q}.{1,3}"
 
   db.query query, params, (err, results) ->
     if err then console.error err
@@ -68,7 +68,6 @@ getEtym = (req, res) ->
         response =
           rels: rels
           nodes: nodes
-          #node: nodes[0]
         res.send response
       else
         depth--
