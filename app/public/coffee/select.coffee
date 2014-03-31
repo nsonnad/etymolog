@@ -69,5 +69,7 @@ $(window).bind 'popstate', (event) ->
     return
   else
     newId = event.originalEvent.state
-    $('#word-selector').select2('val', newId)
+    $ '#word-selector'
+      .select2('val', newId)
+
     getEtymById newId
