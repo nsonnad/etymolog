@@ -31,7 +31,7 @@ getNodeByWord = (req, res) ->
 
   # semi-fuzzy search
   params =
-    word: "(?i)#{q}.{1,3}"
+    word: "(?i)#{q}.{0,3}"
 
   db.query query, params, (err, results) ->
     if err then console.error err
