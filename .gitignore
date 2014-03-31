@@ -6,6 +6,5 @@ neo4j
 neo4j-*
 node_modules
 app/routes/*.js
-app/public/scripts
-app/public/styles
-app/public/images
+app/public/scripts/*.js
+app/public/styles/*.css

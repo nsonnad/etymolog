@@ -4,6 +4,7 @@ require './vendor/d3-tip/index.js'
 margin = { t: 20, r: 20, b: 20, l: 20 }
 initWidth = 900
 initHeight = 700
+nodeRad = 7
 etymNodes = []
 etymLinks = []
 graphDiv = document.getElementById('graph')
@@ -26,8 +27,18 @@ svgG = svg.append 'g'
 
 tooltip = d3.tip()
   .attr({ class: 'tooltip' })
-  .offset [-10, 0]
-  .html (d) -> "#{d.word} - #{d.lang}"
+  .offset [-nodeRad, 0]
+  .html (d) ->
+    "<h3>#{d.word} - <small>#{d.lang}</small></h3>
+    <p><a href=\"http://en.wiktionary.org/wiki/#{d.word}\">
+      Look up in Wiktionary
+    </a></p>"
+
+d3.select('tooltip').on 'mouseover', () ->
+  d3.select this
+    .style
+      opacity: 1
+      'pointer-events': 'all'
 
 #svg.append 'defs'
   #.append 'marker'
@@ -72,7 +83,6 @@ showPath = (d) ->
         d3node.classed 'active-target', true
 
 unshowPath = (d) ->
-  tooltip.hide(d)
   d3.selectAll '.node-link'
     .classed 'active-source', false
     .classed 'active-target', false
@@ -126,7 +136,7 @@ applyEtymData = (etymData) ->
   circles = nodeG.append 'circle'
     .attr
       class: 'node-circle'
-      r: 7
+      r: nodeRad
 
   circles.filter (circle) -> circle.id == etymData.nodes[0].id
     .classed 'node-zero', true
