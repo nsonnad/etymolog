@@ -12,7 +12,7 @@ var concat          = require('gulp-concat');
 var uglify          = require('gulp-uglify');
 var minifyCss       = require('gulp-minify-css');
 var runSequence     = require('run-sequence');
-var clean           = require('gulp-clean');
+var rimraf          = require('gulp-rimraf');
 var nodemon         = require('gulp-nodemon');
 
 var paths = {
@@ -32,7 +32,8 @@ var paths = {
     coffee: appDir + '/public/coffee',
     scripts: appDir + '/public/scripts',
     styl: appDir + '/public/styl',
-    styles: appDir + '/public/styles'
+    styles: appDir + '/public/styles',
+    images: appDir + '/public/images'
   }
 };
 
@@ -69,11 +70,23 @@ gulp.task('stylus', function () {
     .pipe(gulp.dest(paths.public.styles));
 });
 
-gulp.task('clean-tmp', function () {
+gulp.task('copy-img', function () {
+  return gulp.src([
+    './node_modules/select2/select2.png',
+    './node_modules/select2/select2-spinner.gif'
+  ], { base: './node_modules/' })
+    .pipe(gulp.dest(paths.public.images));
+});
+
+gulp.task('rimraf-tmp', function () {
+  gulp.src(paths.routes.js + '/*.js', { read: false })
+    .pipe(rimraf({ force: true }));
+  gulp.src(paths.views.js + '/*.js', { read: false })
+    .pipe(rimraf({ force: true }));
   gulp.src(paths.public.scripts, { read: false })
-    .pipe(clean({ force: true }));
+    .pipe(rimraf({ force: true }));
   gulp.src(paths.public.styles, { read: false })
-    .pipe(clean({ force: true }));
+    .pipe(rimraf({ force: true }));
 });
 
 if (process.env.NODE_ENV == 'development') {
@@ -118,8 +131,8 @@ if (process.env.NODE_ENV == 'development') {
 
   gulp.task('default', function (callback) {
     runSequence(
-      'clean-tmp',
-      ['server-coffee', 'coffeeify', 'stylus'],
+      'rimraf-tmp',
+      ['copy-img', 'server-coffee', 'coffeeify', 'stylus'],
       'watch',
       'nodemon',
       callback
@@ -129,8 +142,8 @@ if (process.env.NODE_ENV == 'development') {
 
 gulp.task('heroku:production', function (callback) {
   runSequence(
-    'clean-tmp',
-    ['server-coffee', 'coffeeify', 'stylus'],
+    'rimraf-tmp',
+    ['copy-img', 'server-coffee', 'coffeeify', 'stylus'],
     callback
   );
 });

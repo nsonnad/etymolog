@@ -61,7 +61,6 @@ getEtym = (req, res) ->
 
     db.query query, params, (err, results) ->
       if err then console.error err
-      console.log results
       rels = flatten(results[0].rels)
       nodes = flatten(results[0].nodes)
       if nodes.length < 2000 or depth is minDepth
