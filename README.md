@@ -27,12 +27,14 @@ with the front-end by doing:
   * ~~[gulp buildpack](https://github.com/appstack/heroku-buildpack-nodejs-gulp)~~
   * ~~import existing db~~
 * ~~Limit number of nodes returned from Cypher~~ (sort of works)
-* Change url based on selected word
+* ~~Change url based on selected word~~
 
 ####Front-end
 * ~~Highlight node of currently selected word~~
-* Tooltips on nodes
+* ~~Tooltips on nodes~~
 * Allow clicking on node (or in the tooltip) to load its graph
 * Links to wiktionary pages
-* Lots of aesthetic stuff
+* Loading animation when fetching new node data
+* Render a single node if no rels present
+* Aesthetic stuff
 
