@@ -8,3 +8,4 @@ node_modules
 app/routes/*.js
 app/public/scripts
 app/public/styles
+app/public/images
