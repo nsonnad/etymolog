@@ -1,2 +1,2 @@
-require './select'
 require './drawNodes'
+require './select'

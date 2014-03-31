@@ -1,4 +1,6 @@
+$ = require 'jquery'
 d3 = require 'd3'
+require 'select2'
 require './vendor/d3-tip/index.js'
 
 margin = { t: 20, r: 20, b: 20, l: 20 }
@@ -8,6 +10,31 @@ nodeRad = 7
 etymNodes = []
 etymLinks = []
 graphDiv = document.getElementById('graph')
+m = window.location.pathname.match /\/word\/(\d+)$/
+history.pushState { path: window.location.href }, ''
+
+getEtymById = (id) ->
+  $.ajax
+    url: '/_etym/' + id
+    success: (data) ->
+      if m
+        newUrl = id.toString()
+      else
+        newUrl = "word/#{id.toString()}"
+      wordName = data.nodes[0].word
+      history.pushState id, wordName, newUrl
+      document.title = "etymolog | #{wordName}"
+      $('.wordName').html "#{wordName} - #{data.nodes[0].lang}"
+      applyEtymData data
+      $('#word-selector').select2 'val', id
+    dataType: 'json'
+
+updateSelect = (newId) ->
+  $('#word-selector').select2 'val', newId
+  getEtymById newId
+
+if m
+  updateSelect m[1]
 
 force = d3.layout.force()
   .nodes etymNodes
@@ -124,6 +151,8 @@ applyEtymData = (etymData) ->
       class: 'node-g'
     .on 'mouseover', showPath
     .on 'mouseout', unshowPath
+    .on 'click', (d) ->
+      if d3.event.defaultPrevented then return else updateSelect d.id
 
   circles = nodeG.append 'circle'
     .attr
@@ -186,5 +215,5 @@ linkArc = (d) ->
   "M#{d.source.x},#{d.source.y}A#{dr},#{dr} 0 0,1#{d.target.x},#{d.target.y}"
 
 module.exports =
-  applyEtymData: applyEtymData
+  getEtymById: getEtymById
   updateDimensions: updateDimensions

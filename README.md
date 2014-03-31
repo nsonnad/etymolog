@@ -32,9 +32,10 @@ with the front-end by doing:
 ####Front-end
 * ~~Highlight node of currently selected word~~
 * ~~Tooltips on nodes~~
-* Allow clicking on node (or in the tooltip) to load its graph
+* ~~Allow clicking on node (or in the tooltip) to load its graph~~
 * Links to wiktionary pages
 * Loading animation when fetching new node data
 * ~~Render a single node if no rels present~~
 * Aesthetic stuff
+
 
