@@ -29,16 +29,7 @@ tooltip = d3.tip()
   .attr({ class: 'tooltip' })
   .offset [-nodeRad, 0]
   .html (d) ->
-    "<h3>#{d.word} - <small>#{d.lang}</small></h3>
-    <p><a href=\"http://en.wiktionary.org/wiki/#{d.word}\">
-      Look up in Wiktionary
-    </a></p>"
-
-d3.select('tooltip').on 'mouseover', () ->
-  d3.select this
-    .style
-      opacity: 1
-      'pointer-events': 'all'
+    "<h3>#{d.word} - <small>#{d.lang}</small></h3>"
 
 #svg.append 'defs'
   #.append 'marker'
@@ -83,6 +74,7 @@ showPath = (d) ->
         d3node.classed 'active-target', true
 
 unshowPath = (d) ->
+  tooltip.hide(d)
   d3.selectAll '.node-link'
     .classed 'active-source', false
     .classed 'active-target', false

@@ -4,7 +4,7 @@ applyEtymData = require('./drawNodes').applyEtymData
 
 wordUrl = '/_word'
 currUrl = window.location.pathname
-history.pushState { path: window.location.href}, ''
+history.pushState { path: window.location.href }, ''
 m = currUrl.match /\/word\/(\d+)$/
 
 getEtymById = (id) ->
@@ -15,7 +15,10 @@ getEtymById = (id) ->
         newUrl = id.toString()
       else
         newUrl = "word/#{id.toString()}"
-      history.pushState(id, data.nodes[0].word, newUrl)
+      wordName = data.nodes[0].word
+      history.pushState(id, wordName, newUrl)
+      document.title = wordName
+      $('.wordName').html "#{wordName} - #{data.nodes[0].lang}"
       applyEtymData data
     dataType: 'json'
 
