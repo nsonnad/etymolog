@@ -35,6 +35,6 @@ with the front-end by doing:
 * Allow clicking on node (or in the tooltip) to load its graph
 * Links to wiktionary pages
 * Loading animation when fetching new node data
-* Render a single node if no rels present
+* ~~Render a single node if no rels present~~
 * Aesthetic stuff
 

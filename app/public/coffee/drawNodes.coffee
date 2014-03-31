@@ -128,7 +128,7 @@ applyEtymData = (etymData) ->
       class: 'node-circle'
       r: 7
 
-  d3.select circles[0][0]
+  circles.filter (circle) -> circle.id == etymData.nodes[0].id
     .classed 'node-zero', true
 
   linkG = links.enter().append 'g'
@@ -171,7 +171,7 @@ applyEtymData = (etymData) ->
   force.start()
   for i in [50..0]
     force.tick()
-  force.alpha(0.08)
+  force.alpha(0.015)
   return
 
 svgG.call tooltip

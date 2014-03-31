@@ -45,7 +45,7 @@ getEtym = (req, res) ->
   
   variableQuery = (dpth) ->
     query = [
-      "match p=(a:Word)-[r:ORIGIN_OF*1..#{dpth}]-(b)"
+      "match p=(a:Word)-[r:ORIGIN_OF*0..#{dpth}]-(b)"
       "where not b-->() and id(a)=#{id}"
       "return collect(extract(rel in rels(p) | {
         source: ID(startnode(rel)),
@@ -56,23 +56,19 @@ getEtym = (req, res) ->
         word: n.word,
         lang: n.lang_name,
         pathId: []
-      })) as nodes, {
-        word: a.word,
-        lang: a.lang_name,
-        id: #{id}
-      } as node"
+      })) as nodes"
     ].join('\n')
 
     db.query query, params, (err, results) ->
       if err then console.error err
+      console.log results
       rels = flatten(results[0].rels)
       nodes = flatten(results[0].nodes)
-      node = results[0].node
       if nodes.length < 2000 or depth is minDepth
         response =
           rels: rels
           nodes: nodes
-          node: node
+          #node: nodes[0]
         res.send response
       else
         depth--
