@@ -26,7 +26,6 @@ getEtymById = (id) ->
       document.title = "etymolog | #{wordName}"
       $('.wordName').html "#{wordName} - #{data.nodes[0].lang}"
       applyEtymData data
-      $('#word-selector').select2 'val', id
     dataType: 'json'
 
 updateSelect = (newId) ->
