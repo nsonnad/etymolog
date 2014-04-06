@@ -25,7 +25,11 @@ getNodeByWord = (req, res) ->
   q = req.query.q
   query = [
     "match (n:Word) where n.word =~ {word}"
-    "return {id: ID(n), wordName: n.word, lang: n.lang_name} as word"
+    "return {
+      id: ID(n),
+      wordName: n.word,
+      lang: n.lang_name
+    } as word"
     "order by lower(n.word)"
   ].join('\n')
 
@@ -46,7 +50,7 @@ getEtym = (req, res) ->
   variableQuery = (dpth) ->
     query = [
       "match p=(a:Word)-[r:ORIGIN_OF*0..#{dpth}]-(b)"
-      "where not b-->() and id(a)=#{id}"
+      "where id(a)=#{id} and not b-->()"
       "return collect(extract(rel in rels(p) | {
         source: ID(startnode(rel)),
         target: ID(endnode(rel)),
