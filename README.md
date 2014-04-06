@@ -29,13 +29,16 @@ with the front-end by doing:
 * ~~Limit number of nodes returned from Cypher~~ (sort of works)
 * ~~Change url based on selected word~~
 
+
 ####Front-end
 * ~~Highlight node of currently selected word~~
 * ~~Tooltips on nodes~~
 * ~~Allow clicking on node (or in the tooltip) to load its graph~~
+  * Use d3's `exit().remove()` to maintain persistence
 * Links to wiktionary pages
 * Loading animation when fetching new node data
 * ~~Render a single node if no rels present~~
 * Aesthetic stuff
+
 
 
