@@ -29,18 +29,14 @@ getEtymById = (id) ->
       currWord = data.nodes[0]
       history.pushState id, currWord.word, newUrl
       document.title = "etymolog | #{currWord.word}"
-      $('.wordName').html "#{currWord.word} - #{currWord.lang}"
+      $('#word-selector').select2 'val', id
 
       applyEtymData data
     dataType: 'json'
 
 # update the select value and hit the server for data
-updateSelect = (newId) ->
-  $('#word-selector').select2 'val', newId
-  getEtymById newId
-
 if wordUrlMatch
-  updateSelect wordUrlMatch[1]
+  getEtymById wordUrlMatch[1]
 
 # svg and d3 stuff
 # ------------------------------------------------
@@ -137,7 +133,7 @@ applyEtymData = (etymData) ->
         return
       else
         tooltip.hide()
-        updateSelect d.id
+        getEtymById d.id
 
   circles = nodeG.append 'circle'
     .attr

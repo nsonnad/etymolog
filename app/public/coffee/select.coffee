@@ -1,5 +1,4 @@
 # Autocomplete select box
-
 $ = require 'jquery'
 require 'select2'
 getEtymById = require('./drawNodes').getEtymById
@@ -26,10 +25,11 @@ $('#word-selector').select2
         return { results: data }
     initSelection: (el, cb) ->
       id = $(el).val()
+      console.log id
       $.ajax('/_id', {
         data: { q: id }
         dataType: 'json'
-      }).done((data) -> cb(data[0]))
+      }).done((data) -> console.log data; cb(data[0]))
     formatResult: formatWordResult
     formatSelection: formatWordSelection
     dropdownCssClass: 'bigDrop'
