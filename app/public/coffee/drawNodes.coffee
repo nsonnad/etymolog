@@ -68,7 +68,7 @@ nodesG = svgG.append('g').attr('class', 'nodes-g')
 updateDimensions = () ->
   graphDiv = document.getElementById('graph')
   width = graphDiv.clientWidth
-  height = width
+  height = Math.min width, width * 0.6
   w = width - margin.l - margin.r
   h = height - margin.t - margin.b
   force.size [w, h]
