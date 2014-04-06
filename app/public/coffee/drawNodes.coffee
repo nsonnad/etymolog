@@ -1,43 +1,51 @@
+# Fetch and visualize etymological data
+
 $ = require 'jquery'
 d3 = require 'd3'
 require 'select2'
 require './vendor/d3-tip/index.js'
+makeHash = require './makeHash'
 
 margin = { t: 20, r: 20, b: 20, l: 20 }
 initWidth = 900
 initHeight = 700
 nodeRad = 7
-etymNodes = []
-etymLinks = []
 graphDiv = document.getElementById('graph')
-m = window.location.pathname.match /\/word\/(\d+)$/
+
+# check for a word id and update url
+wordUrlMatch = window.location.pathname.match /\/word\/(\d+)$/
 history.pushState { path: window.location.href }, ''
 
+# fetch a word's etymologies
 getEtymById = (id) ->
   $.ajax
     url: '/_etym/' + id
     success: (data) ->
-      if m
+      if wordUrlMatch
         newUrl = id.toString()
       else
         newUrl = "word/#{id.toString()}"
-      wordName = data.nodes[0].word
-      history.pushState id, wordName, newUrl
-      document.title = "etymolog | #{wordName}"
-      $('.wordName').html "#{wordName} - #{data.nodes[0].lang}"
+
+      currWord = data.nodes[0]
+      history.pushState id, currWord.word, newUrl
+      document.title = "etymolog | #{currWord.word}"
+      $('.wordName').html "#{currWord.word} - #{currWord.lang}"
+
       applyEtymData data
     dataType: 'json'
 
+# update the select value and hit the server for data
 updateSelect = (newId) ->
   $('#word-selector').select2 'val', newId
   getEtymById newId
 
-if m
-  updateSelect m[1]
+if wordUrlMatch
+  updateSelect wordUrlMatch[1]
+
+# svg and d3 stuff
+# ------------------------------------------------
 
 force = d3.layout.force()
-  .nodes etymNodes
-  .links etymLinks
   .linkDistance 80
   .charge -60
 
@@ -57,84 +65,58 @@ tooltip = d3.tip()
   .html (d) ->
     "<h3>#{d.word} - <small>#{d.lang}</small></h3>"
 
-#svg.append 'defs'
-  #.append 'marker'
-  #.attr(
-    #id: 'arrowMarker'
-    #class: 'arrow-marker'
-    #viewBox: '0 -5 10 10'
-    #refX: 20
-    #refY: 1
-    #markerWidth: 5
-    #markerHeight: 5
-    #orient: 'auto'
-  #).append 'path'
-    #.attr 'd', 'M0,-5L10,0L0,5'
+linksG = svgG.append('g').attr('class', 'links-g')
+nodesG = svgG.append('g').attr('class', 'nodes-g')
 
+# some semblance of responsiveness
 updateDimensions = () ->
   graphDiv = document.getElementById('graph')
   width = graphDiv.clientWidth
   height = width
   w = width - margin.l - margin.r
   h = height - margin.t - margin.b
-  force.size([w, h])
+  force.size [w, h]
 
   svg.attr
     width: w
     height: h
 
-showPath = (d) ->
+mouseOn = (d) ->
   tooltip.show(d)
+
+  # highlight all paths coming in and out of current node
   paths = d.pathId
-  ix = d.index
+  currIndex = d.index
   paths = if paths.length > 1 then paths.join("'],[data-path='") else paths[0]
   selector = ".node-link[data-path='#{paths}']"
 
   d3.selectAll selector
     .each () ->
+      # check whether current node is source or target
       d3node = d3.select this
-      datum = d3node.datum()
-      if datum.source.index is ix
+      datum = d3node[0][0].__data__
+      if datum.source.index is currIndex
         d3node.classed 'active-source', true
       else
         d3node.classed 'active-target', true
 
-unshowPath = (d) ->
+mouseOff = (d) ->
   tooltip.hide(d)
   d3.selectAll '.node-link'
     .classed 'active-source', false
     .classed 'active-target', false
 
+###
+wordData object contains 'rels' key and 'nodes' key.
+'nodes' contains unique list of all words related to chosen word
+'rels' contains ids of the relevant origin and target nodes
+###
 applyEtymData = (etymData) ->
-  ###
-  wordData object contains 'rels' key and 'nodes' key.
-  'nodes' contains unique list of all words related to chosen word
-  'rels' contains ids of the relevant origin and target nodes
-  ###
-  width = graphDiv.clientWidth
-  height = Math.min(500, Math.max(250, width / 1.5))
-  w = width - margin.l - margin.r
-  h = height - margin.t - margin.b
-
-  # create hash lookup to match links and nodes
-  # adding in the path ids for highlighting
-  hashLookup = {}
-
-  etymData.nodes.forEach (d) ->
-    hashLookup[d.id] = d
-
-  etymData.rels.forEach (d) ->
-    hashLookup[d.source].pathId.push d.pathId.toString()
-    hashLookup[d.target].pathId.push d.pathId.toString()
-    d.source = hashLookup[d.source]
-    d.target = hashLookup[d.target]
+  updateDimensions()
 
   force
-    .nodes d3.values hashLookup
+    .nodes d3.values(makeHash(etymData))
     .links etymData.rels
-
-  linksG = svgG.append('g').attr('class', 'links-g')
-  nodesG = svgG.append('g').attr('class', 'nodes-g')
 
   svgG.selectAll('.node-link').remove()
   svgG.selectAll('.node-g').remove()
@@ -148,18 +130,22 @@ applyEtymData = (etymData) ->
   nodeG = nodes.enter().append 'g'
     .attr
       class: 'node-g'
-    .on 'mouseover', showPath
-    .on 'mouseout', unshowPath
+    .on 'mouseover', mouseOn
+    .on 'mouseout', mouseOff
     .on 'click', (d) ->
-      if d3.event.defaultPrevented then return else updateSelect d.id
+      if d3.event.defaultPrevented || d.id == etymData.nodes[0].id
+        return
+      else
+        tooltip.hide()
+        updateSelect d.id
 
   circles = nodeG.append 'circle'
     .attr
       class: 'node-circle'
       r: nodeRad
 
-  circles.filter (circle) -> circle.id == etymData.nodes[0].id
-    .classed 'node-zero', true
+  nodeZero = circles.filter (circle) -> circle.id == etymData.nodes[0].id
+  nodeZero.classed 'node-zero', true
 
   linkG = links.enter().append 'g'
     .attr
@@ -168,6 +154,7 @@ applyEtymData = (etymData) ->
 
   linkLines = linkG.append 'path'
 
+  # only move the dragged node, not the whole graph
   nodeG
     .call(d3.behavior.drag().origin((d) -> return d)
     .on 'drag', (d) ->
@@ -196,17 +183,16 @@ applyEtymData = (etymData) ->
 
   force
     .on 'tick', tick
-    .size [w, h]
+    .start()
 
-  force.start()
   for i in [50..0]
     force.tick()
   force.alpha(0.015)
-  return
 
 svgG.call tooltip
 updateDimensions()
 
+# curved link paths
 linkArc = (d) ->
   dx = d.target.x - d.source.x
   dy = d.target.y - d.source.y
@@ -215,4 +201,3 @@ linkArc = (d) ->
 
 module.exports =
   getEtymById: getEtymById
-  updateDimensions: updateDimensions
