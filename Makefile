@@ -64,7 +64,7 @@ data/input/${ETYMWN_FILE}:
 		@echo "\Fetching etymological data..."
 		@echo "-----------------------------------------------------------"
 		mkdir -p $(dir $@)
-		curl -o $@.download http://www.mpi-inf.mpg.de/~gdemelo/downloads/${ETYMWN_FILE}
+		curl -o $@.download 'http://people.mpi-inf.mpg.de/~gdemelo/downloads/${ETYMWN_FILE}'
 		mv $@.download $@
 
 data/input/etymwn.tsv: data/input/${ETYMWN_FILE}
